@@ -1,0 +1,12 @@
+.row-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em;
+  margin: 0 1em;
+}
+
+.edit-button {
+  height: 40px;
+  padding: 10px;
+}

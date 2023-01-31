@@ -1,0 +1,11 @@
+.row-item {
+  border: 2px solid orange;
+  padding: 0.5em;
+  margin: 0 1em;
+}
+
+.new-row-drop-zone {
+  border: 1px dashed orange;
+  padding: 0.5em;
+  margin: 2em 1em;
+}

@@ -6,6 +6,7 @@
 }
 
 .edit-button {
-  height: 40px;
-  padding: 10px;
+  height: 3em;
+  width: 3em;
+  padding: 0.5em;
 }

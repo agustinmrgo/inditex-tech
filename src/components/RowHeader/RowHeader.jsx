@@ -7,7 +7,7 @@ export const RowHeader = ({ row, onDeleteRow }) => (
   <div className="row-header-container">
     <h2>{row.id}</h2>
     <div>
-      <button className="edit-button" style={{ marginRight: "0.5em" }}>
+      <button className="edit-button" style={{ marginRight: "1em" }}>
         ✏️
       </button>
       <button className="edit-button" onClick={onDeleteRow}>

@@ -8,40 +8,64 @@ export const reorder = (list, startIndex, endIndex) => {
 };
 
 export const reorderRows = (rows, source, destination) => {
-  const current = rows.find((x) => x.id === source.droppableId);
-  const next = rows.find((x) => x.id === destination.droppableId);
-  const target = current.productIds[source.index];
-
-  // moving to same list
+  const reorderedRows = Array.from(rows);
+  const sourceRow = reorderedRows.find((row) => row.id === source.droppableId);
+  // reorder products within a row
   if (source.droppableId === destination.droppableId) {
-    const reordered = reorder(
-      current.productIds,
+    const reorderedProductIds = reorder(
+      sourceRow.productIds,
       source.index,
       destination.index
     );
-    return rows.map((x) =>
-      x.id === current.id ? { ...x, productIds: reordered } : x
-    );
+    sourceRow.productIds = [...reorderedProductIds];
   }
-  // moving to different list
-  // remove from original
-  current.productIds.splice(source.index, 1);
-  // insert into next
-  next.productIds.splice(destination.index, 0, target);
 
-  return rows.map((x) => {
-    if (current.id === x.id) {
-      return {
-        ...x,
-        productIds: current.productIds,
-      };
-    } else if (next.id === x.id) {
-      return {
-        ...x,
-        productIds: next.productIds,
-      };
+  // move product from one row to another
+  if (source.droppableId !== destination.droppableId) {
+    const destinationRow = reorderedRows.find(
+      (row) => row.id === destination.droppableId
+    );
+    // avoid empty rows and rows with more than 3 products
+    if (
+      sourceRow.productIds.length > 1 &&
+      destinationRow.productIds.length < 3
+    ) {
+      const item = sourceRow.productIds.splice(source.index, 1)[0];
+      destinationRow.productIds.splice(destination.index, 0, item);
     }
+  }
 
-    return x;
-  });
+  return [...reorderedRows];
 };
+
+// if (type === "product") {
+//   // const reorderedRows = reorderRows(rows, source, destination);
+//   // setRows(reorderedRows);
+
+//   // reorder products within a row
+//   if (source.droppableId === destination.droppableId) {
+//     const sourceRow = rows.find((row) => row.id === source.droppableId);
+//     const reorderedProductIds = reorder(
+//       sourceRow.productIds,
+//       source.index,
+//       destination.index
+//     );
+//     sourceRow.productIds = [...reorderedProductIds];
+//   }
+
+//   // move product from one row to another
+//   if (source.droppableId !== destination.droppableId) {
+//     const sourceRow = rows.find((row) => row.id === source.droppableId);
+//     const destinationRow = rows.find(
+//       (row) => row.id === destination.droppableId
+//     );
+//     // avoid empty rows and rows with more than 3 products
+//     if (
+//       sourceRow.productIds.length > 1 &&
+//       destinationRow.productIds.length < 3
+//     ) {
+//       const item = sourceRow.productIds.splice(source.index, 1)[0];
+//       destinationRow.productIds.splice(destination.index, 0, item);
+//     }
+//   }
+// }

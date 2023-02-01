@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+// import Snackbar from "@mui/material/Snackbar";
 
 import { RowHeader } from "../RowHeader/RowHeader";
-import { reorder } from "../../utils/reorder";
+import { reorder, reorderRows } from "../../utils/reorder";
 import "./RowsContainer.css";
 
 export const RowsContainer = () => {
   const [rows, setRows] = useState([
-    { id: "row1", productIds: ["product1", "product2"] },
-    { id: "row2", productIds: ["product3"] },
+    {
+      id: "row1",
+      productIds: ["product1", "product2", "product3"],
+    },
+    { id: "row2", productIds: ["product4", "product5", "product6"] },
   ]);
-  const [products] = useState([
+  const [products, setProducts] = useState([
     { id: "product1", content: "Product 1" },
     { id: "product2", content: "Product 2" },
     { id: "product3", content: "Product 3" },
+    { id: "product4", content: "Product 4" },
+    { id: "product5", content: "Product 5" },
+    { id: "product6", content: "Product 6" },
   ]);
+  // const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const handleDragEnd = (result) => {
-    const { destination, source, type } = result;
-
+  const handleDragEnd = ({ destination, source, type }) => {
     // return if there's no destination
     if (!destination) return;
 
@@ -29,37 +35,40 @@ export const RowsContainer = () => {
     )
       return;
 
+    let reorderedRows = [];
+    // move rows themselves
     if (type === "row") {
-      const reorderRows = reorder(
+      reorderedRows = reorder(
         Array.from(rows),
         source.index,
         destination.index
       );
-      setRows(reorderRows);
     }
-
-    if (source.droppableId === destination.droppableId) {
-      const sourceRow = rows.find((row) => row.id === source.droppableId);
-      const reorderedProductIds = reorder(
-        sourceRow.productIds,
-        source.index,
-        destination.index
-      );
-      sourceRow.productIds = [...reorderedProductIds];
+    // move products within a row and between rows
+    if (type === "product") {
+      reorderedRows = reorderRows(rows, source, destination);
     }
-
-    if (source.droppableId !== destination.droppableId) {
-      const sourceRow = rows.find((row) => row.id === source.droppableId);
-      const destinationRow = rows.find(
-        (row) => row.id === destination.droppableId
-      );
-      const item = sourceRow.productIds.splice(source.index, 1)[0];
-      destinationRow.productIds.splice(destination.index, 0, item);
-    }
+    setRows(reorderedRows);
   };
 
-  const handleAddRow = (event) => {
-    console.log("EVENT", event);
+  const handleAddRow = () => {
+    const newProduct = {
+      id: `product${products.length + 1}`,
+      content: `Product ${products.length + 1}`,
+    };
+    setProducts([...products, { ...newProduct }]);
+    setRows([
+      ...rows,
+      {
+        id: `row${rows.length + 1}`,
+        productIds: [newProduct.id],
+      },
+    ]);
+  };
+
+  const handleDeleteRow = (rowId) => {
+    const newRows = rows.filter((row) => row.id !== rowId);
+    setRows(newRows);
   };
 
   return (
@@ -80,7 +89,10 @@ export const RowsContainer = () => {
                       {...dragRowProvided.draggableProps}
                       {...dragRowProvided.dragHandleProps}
                     >
-                      <RowHeader row={row} />
+                      <RowHeader
+                        row={row}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                      />
                       <Droppable
                         droppableId={row.id}
                         type="product"
@@ -126,10 +138,11 @@ export const RowsContainer = () => {
                   )}
                 </Draggable>
               ))}
-              <Draggable
+
+              {/* <Draggable
                 key="new-row"
                 draggableId="new-row"
-                index={rows.length + 1}
+                index={rows.length}
               >
                 {(dragRowProvided) => (
                   <div
@@ -141,13 +154,30 @@ export const RowsContainer = () => {
                     <p>Drop product to add new row</p>
                   </div>
                 )}
-              </Draggable>
+              </Draggable> */}
 
               {dropRowProvided.placeholder}
             </div>
           )}
         </Droppable>
+        {/* <Droppable droppableId="new-row" type="new-row" direction="vertical">
+          {(dropNewRowProvided) => (
+            <div
+              className="new-row-drop-zone"
+              ref={dropNewRowProvided.innerRef}
+              {...dropNewRowProvided.droppableProps}
+              // style={{ border: "1px dashed orange", minHeight: "8em" }}
+            ></div>
+          )}
+        </Droppable> */}
       </DragDropContext>
+      {/* <Snackbar
+        open={snackbarMessage !== ""} //useMemo here
+        autoHideDuration={3000}
+        // onClose={handleClose}
+        message={snackbarMessage}
+        // action={action}
+      /> */}
     </>
   );
 };

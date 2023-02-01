@@ -6,10 +6,14 @@ import "./RowHeader.css";
 export const RowHeader = ({ row, onDeleteRow }) => (
   <div className="row-header-container">
     <h2>{row.id}</h2>
-    <button className="edit-button">✏️</button>
-    <button className="edit-button" onClick={onDeleteRow}>
-      🗑️
-    </button>
+    <div>
+      <button className="edit-button" style={{ marginRight: "0.5em" }}>
+        ✏️
+      </button>
+      <button className="edit-button" onClick={onDeleteRow}>
+        🗑️
+      </button>
+    </div>
   </div>
 );
 

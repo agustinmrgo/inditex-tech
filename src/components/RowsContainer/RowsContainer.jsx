@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-// import Snackbar from "@mui/material/Snackbar";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import { RowHeader } from "../RowHeader/RowHeader";
+import { ProductsContainer } from "../ProductsContainer/ProductsContainer";
+
 import { reorder, reorderRows } from "../../utils/reorder";
 import "./RowsContainer.css";
 
@@ -22,7 +22,6 @@ export const RowsContainer = () => {
     { id: "product5", content: "Product 5" },
     { id: "product6", content: "Product 6" },
   ]);
-  // const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleDragEnd = ({ destination, source, type }) => {
     // return if there's no destination
@@ -82,102 +81,19 @@ export const RowsContainer = () => {
               {...dropRowProvided.droppableProps}
             >
               {rows.map((row, index) => (
-                <Draggable key={row.id} draggableId={row.id} index={index}>
-                  {(dragRowProvided) => (
-                    <div
-                      ref={dragRowProvided.innerRef}
-                      {...dragRowProvided.draggableProps}
-                      {...dragRowProvided.dragHandleProps}
-                    >
-                      <RowHeader
-                        row={row}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                      />
-                      <Droppable
-                        droppableId={row.id}
-                        type="product"
-                        direction="horizontal"
-                      >
-                        {(dropProductsProvided) => (
-                          <div
-                            ref={dropProductsProvided.innerRef}
-                            {...dropProductsProvided.draggableProps}
-                            style={{ display: "flex", margin: "10px 0 20px" }}
-                          >
-                            {row.productIds.map((productId, index) => {
-                              const product = products.find(
-                                (product) => product.id === productId
-                              ) || {
-                                id: "not-found",
-                                content: "Product not found",
-                              };
-                              return (
-                                <Draggable
-                                  key={product.id}
-                                  draggableId={product.id}
-                                  index={index}
-                                >
-                                  {(dragProductProvided) => (
-                                    <div
-                                      className="row-item"
-                                      ref={dragProductProvided.innerRef}
-                                      {...dragProductProvided.draggableProps}
-                                      {...dragProductProvided.dragHandleProps}
-                                    >
-                                      <p>{product.content}</p>
-                                    </div>
-                                  )}
-                                </Draggable>
-                              );
-                            })}
-                            {dropProductsProvided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                  )}
-                </Draggable>
+                <ProductsContainer
+                  key={row.id}
+                  row={row}
+                  index={index}
+                  products={products}
+                  onDeleteRow={() => handleDeleteRow(row.id)}
+                />
               ))}
-
-              {/* <Draggable
-                key="new-row"
-                draggableId="new-row"
-                index={rows.length}
-              >
-                {(dragRowProvided) => (
-                  <div
-                    className="new-row-drop-zone"
-                    ref={dragRowProvided.innerRef}
-                    {...dragRowProvided.draggableProps}
-                    {...dragRowProvided.dragHandleProps}
-                  >
-                    <p>Drop product to add new row</p>
-                  </div>
-                )}
-              </Draggable> */}
-
               {dropRowProvided.placeholder}
             </div>
           )}
         </Droppable>
-        {/* <Droppable droppableId="new-row" type="new-row" direction="vertical">
-          {(dropNewRowProvided) => (
-            <div
-              className="new-row-drop-zone"
-              ref={dropNewRowProvided.innerRef}
-              {...dropNewRowProvided.droppableProps}
-              // style={{ border: "1px dashed orange", minHeight: "8em" }}
-            ></div>
-          )}
-        </Droppable> */}
       </DragDropContext>
-      {/* <Snackbar
-        open={snackbarMessage !== ""} //useMemo here
-        autoHideDuration={3000}
-        // onClose={handleClose}
-        message={snackbarMessage}
-        // action={action}
-      /> */}
     </>
   );
 };

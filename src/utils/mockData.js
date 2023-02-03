@@ -1,52 +1,16 @@
 export const products = [
+  { id: "product1", content: "Product 1" },
+  { id: "product2", content: "Product 2" },
+  { id: "product3", content: "Product 3" },
+  { id: "product4", content: "Product 4" },
+  { id: "product5", content: "Product 5" },
+  { id: "product6", content: "Product 6" },
+];
+
+export const initialRows = [
   {
-    name: "Leather Jacket",
-    price: "$150",
-    imageURL: "https://image1.jpg",
+    id: "row1",
+    productIds: ["product1", "product2", "product3"],
   },
-  {
-    name: "Denim Jeans",
-    price: "$80",
-    imageURL: "https://image2.jpg",
-  },
-  {
-    name: "Suede Boots",
-    price: "$120",
-    imageURL: "https://image3.jpg",
-  },
-  {
-    name: "Silk Dress",
-    price: "$200",
-    imageURL: "https://image4.jpg",
-  },
-  {
-    name: "Cashmere Sweater",
-    price: "$90",
-    imageURL: "https://image5.jpg",
-  },
-  {
-    name: "Fur Coat",
-    price: "$500",
-    imageURL: "https://image6.jpg",
-  },
-  {
-    name: "Linen Shirt",
-    price: "$70",
-    imageURL: "https://image7.jpg",
-  },
-  {
-    name: "Cotton T-Shirt",
-    price: "$40",
-    imageURL: "https://image8.jpg",
-  },
-  {
-    name: "Wool Scarf",
-    price: "$30",
-    imageURL: "https://image9.jpg",
-  },
-  {
-    name: "Nylon Backpack",
-    price: "$60",
-    imageURL: "https://image10.jpg",
-  },
+  { id: "row2", productIds: ["product4", "product5", "product6"] },
 ];

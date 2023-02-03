@@ -13,11 +13,12 @@ export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
     <Draggable key={id} draggableId={id} index={index}>
       {(dragRowProvided) => (
         <div
+          className="row-container"
           ref={dragRowProvided.innerRef}
           {...dragRowProvided.draggableProps}
           {...dragRowProvided.dragHandleProps}
         >
-          <RowHeader row={row} onDeleteRow={onDeleteRow} />
+          {/* <RowHeader row={row} onDeleteRow={onDeleteRow} /> */}
           <Droppable droppableId={row.id} type="product" direction="horizontal">
             {(dropProductsProvided) => (
               <div
@@ -36,6 +37,7 @@ export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
                     <Product key={product.id} product={product} index={index} />
                   );
                 })}
+                <RowHeader row={row} onDeleteRow={onDeleteRow} />
                 {dropProductsProvided.placeholder}
               </div>
             )}

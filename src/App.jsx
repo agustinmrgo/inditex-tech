@@ -1,14 +1,21 @@
 import React from "react";
 
+import { initializeLocalStorageItem } from "./utils/helpers";
 import { RowsContainer } from "./components/RowsContainer/RowsContainer";
+import { products, initialRows } from "./utils/mockData";
 import "./App.css";
 
-const App = () => (
-  <div className="App" style={{ height: "100%", width: "100%" }}>
-    <div style={{ padding: "2em" }}>
-      <RowsContainer />
+const App = () => {
+  initializeLocalStorageItem("products", products);
+  initializeLocalStorageItem("rows", initialRows);
+
+  return (
+    <div className="App" style={{ height: "100%", width: "100%" }}>
+      <div style={{ padding: "2em" }}>
+        <RowsContainer />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default App;

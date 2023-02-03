@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { ProductsContainer } from "../ProductsContainer/ProductsContainer";
+import { getLocalStoragePromise, delayForDemo } from "../../utils/helpers";
 
 import { reorder, reorderRows } from "../../utils/reorder";
 import "./RowsContainer.css";
 
 export const RowsContainer = () => {
-  const [rows, setRows] = useState([
-    {
-      id: "row1",
-      productIds: ["product1", "product2", "product3"],
-    },
-    { id: "row2", productIds: ["product4", "product5", "product6"] },
-  ]);
-  const [products, setProducts] = useState([
-    { id: "product1", content: "Product 1" },
-    { id: "product2", content: "Product 2" },
-    { id: "product3", content: "Product 3" },
-    { id: "product4", content: "Product 4" },
-    { id: "product5", content: "Product 5" },
-    { id: "product6", content: "Product 6" },
-  ]);
+  const [rows, setRows] = useState([]);
+  const [products, setProducts] = useState([]);
+  const { promiseInProgress } = usePromiseTracker({ delay: 1200 });
+
+  useEffect(() => {
+    trackPromise(
+      delayForDemo(getLocalStoragePromise("products"), 900).then((response) =>
+        setProducts(response)
+      )
+    );
+    trackPromise(
+      delayForDemo(getLocalStoragePromise("rows"), 1240).then((response) =>
+        setRows(response)
+      )
+    );
+  }, []);
 
   const handleDragEnd = ({ destination, source, type }) => {
     // return if there's no destination
@@ -70,30 +73,53 @@ export const RowsContainer = () => {
     setRows(newRows);
   };
 
+  const handleSave = () => {
+    localStorage.setItem("rows", JSON.stringify(rows));
+    localStorage.setItem("products", JSON.stringify(products));
+  };
+
+  // if (products.length === 0 && !promiseInProgress)
+  //   return <div>No products!</div>;
+
+  if (promiseInProgress) return <div>Loading rows & products...</div>;
+
   return (
     <>
-      <button onClick={handleAddRow}>+ Add row</button>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="products-board" type="row" direction="vertical">
-          {(dropRowProvided) => (
-            <div
-              ref={dropRowProvided.innerRef}
-              {...dropRowProvided.droppableProps}
-            >
-              {rows.map((row, index) => (
-                <ProductsContainer
-                  key={row.id}
-                  row={row}
-                  index={index}
-                  products={products}
-                  onDeleteRow={() => handleDeleteRow(row.id)}
-                />
-              ))}
-              {dropRowProvided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div style={{ marginBottom: "2em" }}>
+        <button onClick={handleAddRow}>+ Add row</button>
+        <button onClick={handleSave} style={{ marginLeft: "1em" }}>
+          Save
+        </button>
+      </div>
+      {rows.length === 0 && !promiseInProgress && <div>No rows, add one!</div>}
+      {rows.length === 0 && promiseInProgress && <div>Loading rows...</div>}
+      {!promiseInProgress && (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable
+            droppableId="products-board"
+            type="row"
+            direction="vertical"
+          >
+            {(dropRowProvided) => (
+              <div
+                ref={dropRowProvided.innerRef}
+                {...dropRowProvided.droppableProps}
+              >
+                {rows.map((row, index) => (
+                  <ProductsContainer
+                    key={row.id}
+                    row={row}
+                    index={index}
+                    products={products}
+                    onDeleteRow={() => handleDeleteRow(row.id)}
+                  />
+                ))}
+                {dropRowProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </>
   );
 };

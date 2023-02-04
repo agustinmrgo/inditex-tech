@@ -1,3 +1,12 @@
+.top-bar {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+.top-bar-left {
+  flex: 1;
+}
+
 .row-item {
   border: 2px solid orange;
   padding: 0.5em;

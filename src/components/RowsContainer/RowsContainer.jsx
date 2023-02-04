@@ -55,7 +55,7 @@ export const RowsContainer = () => {
   const handleAddRow = () => {
     const newProduct = {
       id: `product${products.length + 1}`,
-      alignment: "left",
+
       content: `Product ${products.length + 1}`,
     };
     setProducts([...products, { ...newProduct }]);
@@ -63,6 +63,7 @@ export const RowsContainer = () => {
       ...rows,
       {
         id: `row${rows.length + 1}`,
+        alignment: 0,
         productIds: [newProduct.id],
       },
     ]);
@@ -89,15 +90,48 @@ export const RowsContainer = () => {
     setRows(newRows);
   };
 
+  const handleZoomIn = () => {
+    // let root = document.documentElement;
+    // const currentFontSize = getComputedStyle(
+    //   document.documentElement
+    // ).getPropertyValue("--font-size");
+    // root.style.setProperty(
+    //   "--font-size",
+    //   parseInt(currentFontSize) + 10 + "px"
+    // );
+    // root.style.setProperty("--font-size", 30 + "px");
+    // localStorage.setItem("fontSize", 30 + "px");
+  };
+  const handleZoomOut = () => {
+    // let root = document.documentElement;
+    // const currentFontSize = getComputedStyle(
+    //   document.documentElement
+    // ).getPropertyValue("--font-size");
+    // root.style.setProperty(
+    //   "--font-size",
+    //   parseInt(currentFontSize) + 10 + "px"
+    // );
+    // root.style.setProperty("--font-size", 30 + "px");
+    // localStorage.setItem("fontSize", 30 + "px");
+  };
+
   if (promiseInProgress) return <div>Loading rows & products...</div>;
 
   return (
     <>
-      <div style={{ marginBottom: "2em" }}>
-        <button onClick={handleAddRow}>+ Add row</button>
-        <button onClick={handleSave} style={{ marginLeft: "1em" }}>
-          Save
-        </button>
+      <div className="top-bar">
+        <div className="top-bar-left">
+          <button onClick={handleAddRow}>+ Add row</button>
+          <button onClick={handleSave} style={{ marginLeft: "1em" }}>
+            Save
+          </button>
+        </div>
+        <div>
+          <button onClick={handleZoomIn}>+</button>
+          <button onClick={handleZoomOut} style={{ marginLeft: "1em" }}>
+            -
+          </button>
+        </div>
       </div>
       {rows.length === 0 && !promiseInProgress && <div>No rows, add one!</div>}
       {rows.length === 0 && promiseInProgress && <div>Loading rows...</div>}

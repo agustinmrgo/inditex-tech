@@ -94,29 +94,10 @@ export const RowsContainer = () => {
     setRows(newRows);
   };
 
-  const handleZoomIn = () => {
-    // let root = document.documentElement;
-    // const currentFontSize = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue("--font-size");
-    // root.style.setProperty(
-    //   "--font-size",
-    //   parseInt(currentFontSize) + 10 + "px"
-    // );
-    // root.style.setProperty("--font-size", 30 + "px");
-    // localStorage.setItem("fontSize", 30 + "px");
-  };
-  const handleZoomOut = () => {
-    // let root = document.documentElement;
-    // const currentFontSize = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue("--font-size");
-    // root.style.setProperty(
-    //   "--font-size",
-    //   parseInt(currentFontSize) + 10 + "px"
-    // );
-    // root.style.setProperty("--font-size", 30 + "px");
-    // localStorage.setItem("fontSize", 30 + "px");
+  const handleZoom = (changeAmount) => {
+    const root = document.getElementById("root");
+    let currentSize = parseInt(window.getComputedStyle(root).fontSize);
+    root.style.fontSize = currentSize + changeAmount + "px";
   };
 
   if (promiseInProgress) return <div>Loading rows & products...</div>;
@@ -130,8 +111,8 @@ export const RowsContainer = () => {
           <button onClick={handleSave}>Save</button>
         </div>
         <div className="top-bar-right">
-          <button onClick={handleZoomIn}>+</button>
-          <button onClick={handleZoomOut}>-</button>
+          <button onClick={() => handleZoom(2)}>+</button>
+          <button onClick={() => handleZoom(-2)}>-</button>
         </div>
       </div>
       {rows.length === 0 && !promiseInProgress && <div>No rows, add one!</div>}

@@ -7,6 +7,14 @@
   flex: 1;
 }
 
+.top-bar-left > *:not(:first-child) {
+  margin-left: 1em;
+}
+
+.top-bar-right > *:not(:first-child) {
+  margin-left: 1em;
+}
+
 .row-item {
   border: 2px solid orange;
   padding: 0.5em;

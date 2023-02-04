@@ -75,9 +75,13 @@ export const RowsContainer = () => {
   };
 
   const handleSave = () => {
-    localStorage.setItem("rows", JSON.stringify(rows));
-    localStorage.setItem("products", JSON.stringify(products));
-    alert("Changes saved successfully!");
+    if (rows.length > 0) {
+      localStorage.setItem("rows", JSON.stringify(rows));
+      localStorage.setItem("products", JSON.stringify(products));
+      alert("Changes saved successfully!");
+    } else {
+      alert("There are no rows to save!");
+    }
   };
 
   const handleAligmentChange = (rowId, alignment) => {
@@ -121,16 +125,13 @@ export const RowsContainer = () => {
     <>
       <div className="top-bar">
         <div className="top-bar-left">
+          <button onClick={() => setRows([])}>Clear all</button>
           <button onClick={handleAddRow}>+ Add row</button>
-          <button onClick={handleSave} style={{ marginLeft: "1em" }}>
-            Save
-          </button>
+          <button onClick={handleSave}>Save</button>
         </div>
-        <div>
+        <div className="top-bar-right">
           <button onClick={handleZoomIn}>+</button>
-          <button onClick={handleZoomOut} style={{ marginLeft: "1em" }}>
-            -
-          </button>
+          <button onClick={handleZoomOut}>-</button>
         </div>
       </div>
       {rows.length === 0 && !promiseInProgress && <div>No rows, add one!</div>}

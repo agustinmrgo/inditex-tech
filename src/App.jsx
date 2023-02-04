@@ -10,7 +10,7 @@ const App = () => {
   initializeLocalStorageItem("rows", initialRows);
 
   return (
-    <div className="App" style={{ height: "100%", width: "100%" }}>
+    <div className="App">
       <div style={{ padding: "2em" }}>
         <RowsContainer />
       </div>

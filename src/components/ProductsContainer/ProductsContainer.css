@@ -3,7 +3,14 @@
   margin-bottom: 1.5em;
 }
 
-.row-container {
-  /* border: 1px solid yellowgreen;
-  border-radius: 3px; */
+.products-align-left {
+  justify-content: flex-start;
+}
+
+.products-align-center {
+  justify-content: space-evenly;
+}
+
+.products-align-right {
+  justify-content: flex-end;
 }

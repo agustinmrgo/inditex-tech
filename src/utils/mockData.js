@@ -10,7 +10,12 @@ export const products = [
 export const initialRows = [
   {
     id: "row1",
+    alignment: 0,
     productIds: ["product1", "product2", "product3"],
   },
-  { id: "row2", productIds: ["product4", "product5", "product6"] },
+  {
+    id: "row2",
+    alignment: 0,
+    productIds: ["product4", "product5", "product6"],
+  },
 ];

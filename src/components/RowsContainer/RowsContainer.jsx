@@ -4,7 +4,6 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { ProductsContainer } from "../ProductsContainer/ProductsContainer";
 import { getLocalStoragePromise, delayForDemo } from "../../utils/helpers";
-
 import { reorder, reorderRows } from "../../utils/reorder";
 import "./RowsContainer.css";
 
@@ -15,12 +14,12 @@ export const RowsContainer = () => {
 
   useEffect(() => {
     trackPromise(
-      delayForDemo(getLocalStoragePromise("products"), 900).then((response) =>
+      delayForDemo(getLocalStoragePromise("products"), 1000).then((response) =>
         setProducts(response)
       )
     );
     trackPromise(
-      delayForDemo(getLocalStoragePromise("rows"), 1240).then((response) =>
+      delayForDemo(getLocalStoragePromise("rows"), 1540).then((response) =>
         setRows(response)
       )
     );
@@ -56,6 +55,7 @@ export const RowsContainer = () => {
   const handleAddRow = () => {
     const newProduct = {
       id: `product${products.length + 1}`,
+      alignment: "left",
       content: `Product ${products.length + 1}`,
     };
     setProducts([...products, { ...newProduct }]);
@@ -76,10 +76,18 @@ export const RowsContainer = () => {
   const handleSave = () => {
     localStorage.setItem("rows", JSON.stringify(rows));
     localStorage.setItem("products", JSON.stringify(products));
+    alert("Changes saved successfully!");
   };
 
-  // if (products.length === 0 && !promiseInProgress)
-  //   return <div>No products!</div>;
+  const handleAligmentChange = (rowId, alignment) => {
+    const newRows = rows.map((row) => {
+      if (row.id === rowId) {
+        return { ...row, alignment };
+      }
+      return row;
+    });
+    setRows(newRows);
+  };
 
   if (promiseInProgress) return <div>Loading rows & products...</div>;
 
@@ -108,10 +116,11 @@ export const RowsContainer = () => {
                 {rows.map((row, index) => (
                   <ProductsContainer
                     key={row.id}
-                    row={row}
                     index={index}
+                    row={row}
                     products={products}
                     onDeleteRow={() => handleDeleteRow(row.id)}
+                    onRowAligmentChange={handleAligmentChange}
                   />
                 ))}
                 {dropRowProvided.placeholder}

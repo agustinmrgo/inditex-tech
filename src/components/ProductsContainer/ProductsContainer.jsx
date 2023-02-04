@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 import { RowHeader } from "../RowHeader/RowHeader";
 import { Product } from "../Product/Product";
-
+import { aligments } from "../../utils/constants";
 import "./ProductsContainer.css";
 
-export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
-  const { id, productIds } = row;
+export const ProductsContainer = ({
+  index,
+  row,
+  products,
+  onDeleteRow,
+  onRowAligmentChange,
+}) => {
+  const { id, productIds, alignment } = row;
+
+  useEffect(() => {
+    console.log("ROW ALIG: ", row.alignment);
+  }, [row.alignment]);
+
+  console.log("row aligment: ", alignment);
   return (
-    <Draggable key={id} draggableId={id} index={index}>
+    <Draggable key={row.id} draggableId={id} index={index}>
       {(dragRowProvided) => (
         <div
           className="row-container"
@@ -18,11 +30,17 @@ export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
           {...dragRowProvided.draggableProps}
           {...dragRowProvided.dragHandleProps}
         >
-          {/* <RowHeader row={row} onDeleteRow={onDeleteRow} /> */}
+          <RowHeader
+            row={row}
+            onDeleteRow={onDeleteRow}
+            onRowAligmentChange={onRowAligmentChange}
+          />
           <Droppable droppableId={row.id} type="product" direction="horizontal">
             {(dropProductsProvided) => (
               <div
-                className="products-list"
+                className={`products-list products-align-${
+                  aligments[row.alignment]
+                }`}
                 ref={dropProductsProvided.innerRef}
                 {...dropProductsProvided.draggableProps}
               >
@@ -37,7 +55,6 @@ export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
                     <Product key={product.id} product={product} index={index} />
                   );
                 })}
-                <RowHeader row={row} onDeleteRow={onDeleteRow} />
                 {dropProductsProvided.placeholder}
               </div>
             )}
@@ -51,9 +68,11 @@ export const ProductsContainer = ({ row, index, products, onDeleteRow }) => {
 ProductsContainer.propTypes = {
   row: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    alignment: PropTypes.number.isRequired,
     productIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
   products: PropTypes.array,
   onDeleteRow: PropTypes.func.isRequired,
+  onRowAligmentChange: PropTypes.func.isRequired,
 };

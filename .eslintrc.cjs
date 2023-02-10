@@ -3,8 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
+    "jest/globals": true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jest/recommended",
+  ],
   overrides: [],
   parserOptions: {
     ecmaFeatures: {
@@ -13,6 +18,6 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react"],
+  plugins: ["react", "jest"],
   rules: {},
 };

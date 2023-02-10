@@ -25,5 +25,4 @@ Product.propTypes = {
     content: PropTypes.string.isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
-  // onDeleteProduct: PropTypes.func.isRequired,
 };

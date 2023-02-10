@@ -22,6 +22,7 @@ export const RowHeader = ({ row, onDeleteRow, onRowAligmentChange }) => {
       <h2>{row.id}</h2>
       <div style={{ display: "flex" }}>
         <button
+          data-testid="alignment-button"
           className="edit-button"
           style={{ marginRight: "1em" }}
           onClick={handleAligmentChange}
@@ -30,7 +31,11 @@ export const RowHeader = ({ row, onDeleteRow, onRowAligmentChange }) => {
           {alignment === 1 && <AlignCenterIcon style={{ height: "1.2em" }} />}
           {alignment === 2 && <AlignRightIcon style={{ height: "1.2em" }} />}
         </button>
-        <button className="edit-button" onClick={onDeleteRow}>
+        <button
+          data-testid="delete-button"
+          className="edit-button"
+          onClick={onDeleteRow}
+        >
           🗑️
         </button>
       </div>
